@@ -84,10 +84,35 @@ Page {
                 Label {
                     id: text1
                     text: veg_level_description
+                    //text: veg_level_description + " " + createOpeningString()
                     color: highlighted ? Theme.highlightColor : Theme.secondaryColor
                     font.pixelSize: Theme.fontSizeSmall
                     width: parent.width - (Theme.fontSizeSmall * rating_parsed)
 
+                    function createOpeningString() {
+                        var d = new Date();
+                        // javascript day is 0 sunday -> 6 saturday
+                        // (js-day - 1) modulo 7 results in monday based number
+                        // --> 0 monday, 6 sunday
+                        var day = (d.getDay() - 1) % 7;
+                        console.log(day);
+                        console.log(JSON.stringify(hours_parsed));
+                        var openingsToday = hours_parsed[day];
+
+                        var openingString = "";
+
+                        if(openingsToday.length == 0) {
+                            openingString = "closed today";
+                        } else {
+                            for(var i=0; openingsToday.length; i++) {
+                                openingString = openingString + openingsToday[i].from + "-" + openingsToday[i].to + " "
+                            }
+
+                        }
+
+
+                        return openingString;
+                    }
                 }
                 Repeater {
                     id: repeater
